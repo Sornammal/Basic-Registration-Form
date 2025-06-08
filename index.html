@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/lib/index.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+
+</head>
+
+<body class="bg-gray-100 py-10 px-4">
+    <div class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Registration Form</h2>
+
+        <form id="form" class="space-y-4">
+            <!-- Name -->
+            <div>
+                <label for="name" class="block font-medium text-gray-700">Name:</label>
+                <input type="text" id="name" placeholder="Your full name"
+                    class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                <span id="nameError" class="text-sm text-red-500"></span>
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block font-medium text-gray-700">Email:</label>
+                <input type="email" id="email" placeholder="example@mail.com"
+                    class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                <span id="emailError" class="text-sm text-red-500"></span>
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block font-medium text-gray-700">Password:</label>
+                <input type="password" id="password" placeholder="At least 6 characters"
+                    class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                <span id="passwordError" class="text-sm text-red-500"></span>
+            </div>
+
+            <!-- Message -->
+            <div>
+                <label for="message" class="block font-medium text-gray-700">Description (max 200 characters):</label>
+                <textarea id="message" rows="4" maxlength="200" placeholder="Type your message..."
+                    class="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                <div id="charCount" class="text-sm text-gray-600">0/200 characters</div>
+                <span id="warning" class="text-sm text-red-500"></span>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" id="submitBtn"
+                class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+                disabled>Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const messageInput = document.getElementById("message");
+        const submitBtn = document.getElementById("submitBtn");
+
+        const nameError = document.getElementById("nameError");
+        const emailError = document.getElementById("emailError");
+        const passwordError = document.getElementById("passwordError");
+        const charCount = document.getElementById("charCount");
+        const warning = document.getElementById("warning");
+
+        function validateForm() {
+            let valid = true;
+
+            // Name validation
+            const nameRegex = /^[A-Za-z ]{2,}$/;
+            if (!nameRegex.test(nameInput.value.trim())) {
+                nameError.textContent = "Only letters and spaces allowed (min 2 characters)";
+                valid = false;
+            } else {
+                nameError.textContent = "";
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value.trim())) {
+                emailError.textContent = "Invalid email address";
+                valid = false;
+            } else {
+                emailError.textContent = "";
+            }
+
+            // Password validation
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            if (!passwordRegex.test(passwordInput.value)) {
+                passwordError.textContent = "Password must have 6+ characters, with letters & digits";
+                valid = false;
+            } else {
+                passwordError.textContent = "";
+            }
+
+            submitBtn.disabled = !valid;
+        }
+
+        // Live character counter
+        messageInput.addEventListener("input", () => {
+            const len = messageInput.value.length;
+            charCount.textContent = `${len}/200 characters`;
+
+            if (len > 200) {
+                warning.textContent = "Character limit exceeded!";
+                messageInput.value = messageInput.value.slice(0, 200);
+            } else {
+                warning.textContent = "";
+            }
+        });
+
+        nameInput.addEventListener("input", validateForm);
+        emailInput.addEventListener("input", validateForm);
+        passwordInput.addEventListener("input", validateForm);
+
+        document.getElementById("form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert("Form submitted successfully!");
+        });
+    </script>
+</body>
+
+</html>
